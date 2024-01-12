@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef uint32_t lcg_state_t;
+typedef uint64_t lcg_state_t;
 
 //--- using modulo
 struct lcg {
