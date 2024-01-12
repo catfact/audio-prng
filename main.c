@@ -53,13 +53,39 @@ static void test_lcg64_trunc() {
     print_history();
     printf("\n];\n");
 #endif
-
 }
+
+
+static void test_jmc() {
+    struct lcg_jmc lcg;
+    lcg.s1 = 0xdeadbeef;
+    lcg.s2 = 0x23456789;
+    lcg.s3 = 0x55555555;
+    history_index = 0;
+
+    uint32_t x;
+    cpu_time_start();
+    for (int i=0; i<ITERATIONS; ++i) {
+        x = lcg_jmc_update(&lcg);
+        state_history[history_index++] = x;
+    }
+    unsigned long ns = cpu_time_get_delta_ns();
+    printf("jmc_time = %lu\n", ns);
+
+#if 0
+    printf("trunc = [\n");
+    print_history();
+    printf("\n];\n");
+#endif
+}
+
+
 
 int main() {
 
     test_lcg64_mod();
     test_lcg64_trunc();
+    test_jmc();
 
     return 0;
 }
