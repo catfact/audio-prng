@@ -5,7 +5,8 @@
 #include "lcg.h"
 
 #define PRINT_HISTORY 0
-#define ITERATIONS 100000
+#define PRINT_TIME 1
+#define ITERATIONS 10000000
 
 uint64_t state_history[ITERATIONS];
 unsigned int history_index = 0;
@@ -29,7 +30,8 @@ static void test_lcg64_mod() {
         state_history[history_index++] = lcg;
     }
     unsigned long ns = cpu_time_get_delta_ns();
-    printf("mod_time = %lu;\n", ns);
+    double ns_per_iter = (double)ns / (double)ITERATIONS;
+    printf("mod_time = %f;\n", ns_per_iter);
 
 #if PRINT_HISTORY
     printf("mod = [\n");
@@ -47,7 +49,11 @@ static void test_lcg64_trunc() {
         state_history[history_index++] = lcg;
     }
     unsigned long ns = cpu_time_get_delta_ns();
-    printf("trunc_time = %lu;\n", ns);
+    double ns_per_iter = (double)ns / (double)ITERATIONS;
+
+#if PRINT_TIME
+    printf("trunc_time = %f;\n", ns_per_iter);
+#endif
 
 #if PRINT_HISTORY
     printf("trunc = [\n");
@@ -68,7 +74,8 @@ static void test_lcg32_mod() {
         state_history[history_index++] = lcg;
     }
     unsigned long ns = cpu_time_get_delta_ns();
-    printf("mod_time_32 = %lu;\n", ns);
+    double ns_per_iter = (double)ns / (double)ITERATIONS;
+    printf("mod_time_32 = %f;\n", ns_per_iter);
 
 #if PRINT_HISTORY
     printf("mod_32 = [\n");
@@ -86,7 +93,8 @@ static void test_lcg32_trunc() {
         state_history[history_index++] = lcg;
     }
     unsigned long ns = cpu_time_get_delta_ns();
-    printf("trunc_time_32 = %lu;\n", ns);
+    double ns_per_iter = (double)ns / (double)ITERATIONS;
+    printf("trunc_time_32 = %f;\n", ns_per_iter);
 
 #if PRINT_HISTORY
     printf("trunc_32 = [\n");
@@ -110,7 +118,8 @@ static void test_jmc() {
         state_history[history_index++] = x;
     }
     unsigned long ns = cpu_time_get_delta_ns();
-    printf("jmc_time = %lu;\n", ns);
+    double ns_per_iter = (double)ns / (double)ITERATIONS;
+    printf("jmc_time = %f;\n", ns_per_iter);
 
 #if PRINT_HISTORY
     printf("jmc = [\n");
@@ -123,8 +132,11 @@ static void test_jmc() {
 
 int main() {
 
-    test_lcg64_mod();
-    test_lcg64_trunc();
+    // i think these are getting optimized to 32b registers anyway,
+    // because the hardcoded operands ensure that 32b will not overflow
+//    test_lcg64_mod();
+//    test_lcg64_trunc();
+
     test_lcg32_mod();
     test_lcg32_trunc();
     test_jmc();
