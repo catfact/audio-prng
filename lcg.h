@@ -3,18 +3,15 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef uint64_t lcg_state_t;
-
-//--- using modulo
-struct lcg {
-    lcg_state_t state;
-};
-
-extern struct lcg *lcg_create(lcg_state_t seed);
-extern void lcg_destroy(struct lcg *lcg);
 
 // --- multiplicative generator with modulo
-extern lcg_state_t lcg_mod_next(struct lcg *state);
+extern void lcg64_mod_next(uint64_t *state);
 
 //--- mixed generator with trunctation
-extern lcg_state_t lcg_trunc_next(struct lcg *state);
+extern void lcg64_trunc_next(uint64_t *state);
+
+// --- multiplicative generator with modulo
+extern void lcg32_mod_next(uint32_t *state);
+
+//--- mixed generator with trunctation
+extern void lcg32_trunc_next(uint32_t *state);

@@ -1,25 +1,21 @@
 #include "lcg.h"
 
-struct lcg* lcg_create(lcg_state_t seed) {
-    struct lcg *lcg = malloc(sizeof(struct lcg));
-    lcg->state = seed;
-    return lcg;
+void lcg64_mod_next(uint64_t *state) {
+    uint64_t next = (*state * 0x41a7) % 0x7fffffff;
+    *state = next;
 }
 
-void lcg_destroy(struct lcg *lcg) {
-    free(lcg);
+void lcg64_trunc_next(uint64_t* state) {
+    uint64_t next = ((*state * 0x6255) + 0x3619) & 0x7fffffff;
+    *state = next;
 }
 
-lcg_state_t lcg_mod_next(struct lcg *lcg) {
-    lcg_state_t state = lcg->state;
-    lcg_state_t next = (state * 0x41a7) % 0x7fffffff;
-    lcg->state = next;
-    return next;
+void lcg32_mod_next(uint32_t *state) {
+    uint32_t next = (*state * 0x41a7) % 0x7fff;
+    *state = next;
 }
 
-lcg_state_t lcg_trunc_next(struct lcg *lcg) {
-    lcg_state_t state = lcg->state;
-    lcg_state_t next = ((lcg->state * 0x6255) + 0x3619) & 0x7fffffff;
-    lcg->state = next;
-    return next;
+void lcg32_trunc_next(uint32_t *state) {
+    uint32_t next = ((*state * 0x6255) + 0x3619) & 0x7fff;
+    *state = next;
 }
